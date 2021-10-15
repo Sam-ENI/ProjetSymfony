@@ -1,0 +1,69 @@
+{% extends '/layout/base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <h1 class="text-center">Enregistrer un nouvel utilisateur</h1>
+
+
+
+        <div class="container-md border border-warning text-center p-3">
+
+    {{ form_start(registrationForm) }}
+        <div class="group p-1">
+            {{ form_label(registrationForm.nom) }}
+            {{ form_widget(registrationForm.nom) }}
+            {{ form_errors(registrationForm.nom) }}
+        </div>
+
+        <div class="group p-1">
+            {{ form_label(registrationForm.prenom) }}
+            {{ form_widget(registrationForm.prenom) }}
+            {{ form_errors(registrationForm.prenom) }}
+        </div>
+
+        <div class="group p-1">
+            {{ form_label(registrationForm.username) }}
+            {{ form_widget(registrationForm.username) }}
+            {{ form_errors(registrationForm.username) }}
+        </div>
+
+        <div class="group p-1">
+        {{ form_row(registrationForm.plainPassword, {
+                label: 'Password'
+        }) }}
+        </div>
+
+        <div class="group p-1">
+            {{ form_label(registrationForm.telephone) }}
+            {{ form_widget(registrationForm.telephone) }}
+            {{ form_errors(registrationForm.telephone) }}
+        </div>
+
+        <div class="group p-1">
+            {{ form_label(registrationForm.mail) }}
+            {{ form_widget(registrationForm.mail) }}
+            {{ form_errors(registrationForm.mail) }}
+        </div>
+        <div class="group p-1">
+            {{ form_label(registrationForm.administrateur) }}
+            {{ form_widget(registrationForm.administrateur) }}
+        </div>
+        <div class="group p-1">
+            {{ form_label(registrationForm.actif) }}
+            {{ form_widget(registrationForm.actif) }}
+        </div>
+        <div class="group p-1">
+            {{ form_label(registrationForm.site) }}
+            {{ form_widget(registrationForm.site) }}
+            {{ form_errors(registrationForm.site) }}
+        </div>
+
+
+        {{ form_row(registrationForm.agreeTerms) }}
+
+        <button class="btn btn-lg btn-primary" type="submit">Register</button>
+    {{ form_end(registrationForm) }}
+</div>
+</div>
+{% endblock %}

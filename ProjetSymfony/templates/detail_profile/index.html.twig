@@ -1,0 +1,35 @@
+{% extends '/layout/base.html.twig' %}
+
+{% block body %}
+    <div class="px-4 py-5 my-5 text-center">
+
+        <div class="container">
+            <div class="row align-items-start">
+        <div class="col">
+
+            <img class="d-block mx-auto mb-4" src="/docs/5.1/assets/brand/bootstrap-logo.svg" alt="portrait" width="72" height="57">
+
+        </div>
+
+        <div class="col">
+
+            <h1 class="display-5 fw-bold">{{ participant.username }}</h1>
+                 <div class="col-lg-6 mx-auto">
+                    <p class="lead mb-4">Prénom : {{ participant.prenom }}</p>
+                    <p class="lead mb-4">Nom : {{ participant.nom }}</p>
+                    <p class="lead mb-4">Téléphone : {{ participant.telephone }}</p>
+                    <p class="lead mb-4">Email :{{ participant.mail }}</p>
+                    <p class="lead mb-4">Ville de rattachement : {{ participant.site.nomSite }}</p>
+
+                            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                                <a class="btn btn-lg btn-primary" href="{{ path('main') }}">Retour</a>
+                                <a class="btn btn-lg btn-primary" href="{{ path('profile_update', {'id': app.user.id}) }}">Modifier</a>
+                            </div>
+
+                </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

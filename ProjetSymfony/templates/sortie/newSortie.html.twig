@@ -1,0 +1,181 @@
+{% extends '/layout/base.html.twig' %}
+
+{% block title %}Créer une sortie{% endblock %}
+
+{% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function(){
+
+            $("#lieu_form_ville").change(function(){
+
+               var id = $(this).val();
+                $.get("/sortie/lieu/"+id, function (data, status) {
+                    var infosVilleLieu=JSON.parse(data);
+
+                    let html = "<option>choisir un lieu</option>";
+                    for (let i = 0;i<infosVilleLieu.length;i++){
+                        //console.log(infos[i]);
+                        html+='<option value="'+infosVilleLieu[i].id+'" >'+infosVilleLieu[i].nom+'</option>';
+                    }
+                    $("#sortie_form_lieu").html(html).change(function(){
+
+                        var id = $(this).val();
+                        $.get("/sortie/infosLieu/"+id, function(data, status){
+
+                            var infosLieu=JSON.parse(data);
+                            //console.log(infosLieu);
+                            $("#lieu_form_rue").val(infosLieu.rue);
+                            $("#lieu_form_lat").val(infosLieu.lat);
+                            $("#lieu_form_long").val(infosLieu.long);
+                        });
+
+                    });
+                    $.get("/sortie/lieu/cp/"+id, function(data, status) {
+
+                        var infosVilleCP = JSON.parse(data);
+
+                        //console.log(infosVilleCP);
+                        $("#ville_cp").val(infosVilleCP.codePostal);
+
+                    });
+                })
+            })
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <h1 class="text-center">Organiser une sortie</h1>
+
+    <div class="container-md border border-warning ">
+
+            <div class="row">
+                <div class="col sortieGauche">
+                    {{ form_start(sortieForm) }}
+                        <div class="group p-1">
+                            <label for="{{ field_name(sortieForm.nomSortie)}}"> Nom de la sortie : </label>
+                            <input type="text"
+                                   id="{{ field_name(sortieForm.nomSortie)}}"
+                                   name="{{ field_name(sortieForm.nomSortie)}}"
+                                   value="{{ field_value(sortieForm.nomSortie)}}"
+                                   placeholder="{{ field_label(sortieForm.nomSortie)}}"
+                                   class="form-control"
+                            >
+                        </div>
+
+                        <div class="group p-1">
+                            <label for="{{ field_name(sortieForm.dateHeureDebut)}}"> Date et heure de la sortie : </label>
+                            <input type="date"
+                                   id="{{ field_name(sortieForm.dateHeureDebut)}}"
+                                   name="{{ field_name(sortieForm.dateHeureDebut)}}"
+                                   value=""
+                                   placeholder="dd/mm/yyyy hh:mm"
+                                   class="form-control"
+                            >
+                        </div>
+
+                        <div class="group p-1">
+                            <label for="{{ field_name(sortieForm.dateLimiteInscription)}}"> Date limite d'inscription : </label>
+                            <input type="date"
+                                   id="{{ field_name(sortieForm.dateLimiteInscription)}}"
+                                   name="{{ field_name(sortieForm.dateLimiteInscription)}}"
+                                   value=""
+                                   placeholder="dd/mm/yyyy"
+                                   class="form-control"
+                            >
+                        </div>
+
+                        <div class="group p-1">
+                            <label for="{{ field_name(sortieForm.nbInscriptionMax)}}"> Nombre de places : </label>
+                            <input type="text"
+                                   id="{{ field_name(sortieForm.nbInscriptionMax)}}"
+                                   name="{{ field_name(sortieForm.nbInscriptionMax)}}"
+                                   value="{{ field_value(sortieForm.nbInscriptionMax)}}"
+                                   placeholder="{{ field_label(sortieForm.nbInscriptionMax)}}"
+                                   class="form-control"
+                            >
+                        </div>
+
+                        <div class="group p-1 ">
+                            <label for="{{ field_name(sortieForm.duree)}}"> Durée : </label>
+
+                            <input type="number"
+                                   id="{{ field_name(sortieForm.duree)}}"
+                                   name="{{ field_name(sortieForm.duree)}}"
+                                   value="{{ field_value(sortieForm.duree)}}"
+                                   placeholder="{{ field_label(sortieForm.duree)}}"
+                                   class="form-control"
+                            >
+                        </div>
+
+                        <div class="group p-1">
+                            <label for="{{ field_name(sortieForm.infoSortie)}}"> Description et infos : </label>
+                            <textarea type="textarea"
+                                      id="{{ field_name(sortieForm.infoSortie)}}"
+                                      name="{{ field_name(sortieForm.infoSortie)}}"
+                                      value="{{ field_value(sortieForm.infoSortie)}}"
+                                      placeholder="{{ field_label(sortieForm.infoSortie)}}"
+                                      class="form-control"
+                            ></textarea>
+                        </div>
+                </div>
+
+                <div class="col sortieDroite">
+                    <div class="group p-1">
+                        <label for="{{ field_name(sortieForm.site)}}"> Site : </label>
+                        <input type="text"
+                               id="{{ field_name(sortieForm.site)}}"
+                               name="{{ field_name(sortieForm.site)}}"
+                               value="{{ field_value(sortieForm.site)}}"
+                               class="form-control"
+                               readonly
+                        >
+                    </div>
+
+              {{ form_row(lieuForm.ville) }}
+
+                    <div class="group">
+                        <label>Lieu : </label>
+                        <select  id="sortie_form_lieu" class="form-control"></select>
+                    </div>
+
+                    <div class="group">
+                        <label>Rue : </label>
+                        <input type="text" readonly value="" class="form-control" id="lieu_form_rue"/>
+                    </div>
+
+                    <div class="group">
+                        <label>Code Postal : </label>
+                        <input type="text" readonly value=""  class="form-control" id="ville_cp"/>
+                    </div>
+
+                    <div class="group">
+                        <label>Latitude : </label>
+                        <input type="text" readonly value=""  class="form-control" id="lieu_form_lat"/>
+                    </div>
+
+                    <div class="group">
+                        <label>Longitude : </label>
+                        <input type="text" readonly value="" class="form-control" id="lieu_form_long"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row text-center m-5">
+                    <div class="group">
+                    <button class="btn btn-lg btn-primary" type="submit">Enregistrer</button>
+                    <button class="btn btn-lg btn-primary" type="submit">Publier la sortie</button>
+                    <button class="btn btn-lg btn-primary" type="submit">Annuler</button>
+                    </div>
+            </div>
+
+                {{ form_end(sortieForm) }}
+
+
+    </div>
+
+{% endblock %}
+
+
