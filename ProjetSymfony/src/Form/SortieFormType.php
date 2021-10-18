@@ -24,7 +24,7 @@ class SortieFormType extends AbstractType
             ->add('nbInscriptionMax')
             ->add('duree')
             ->add('infoSortie')
-            ->add('site',TextType::class)
+           // ->add('site',TextType::class)
 
 
          /*    ->add('ville',EntityType::class,[ 'class'=>Ville::class,

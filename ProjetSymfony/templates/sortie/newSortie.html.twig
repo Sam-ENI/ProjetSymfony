@@ -124,14 +124,15 @@
 
                 <div class="col sortieDroite">
                     <div class="group p-1">
-                        <label for="{{ field_name(sortieForm.site)}}"> Site : </label>
-                        <input type="text"
+                        <label> Site : </label>
+                        <p>{{ site.nomSite }}</p>
+                       {# <input type="text"
                                id="{{ field_name(sortieForm.site)}}"
                                name="{{ field_name(sortieForm.site)}}"
                                value="{{ field_value(sortieForm.site)}}"
                                class="form-control"
                                readonly
-                        >
+                        >#}
                     </div>
 
               {{ form_row(lieuForm.ville) }}

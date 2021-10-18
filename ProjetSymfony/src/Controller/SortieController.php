@@ -34,13 +34,13 @@ class SortieController extends AbstractController
         }
         $sortie = new Sortie();
 
-        $sortie->setSite( $this->getUser()->getSite());
+//        $sortie->setSite( $this->getUser()->getSite());
         $sortieForm = $this->createForm(SortieFormType::class, $sortie);
-        if($request->request->get('sortie_form')){
-            $sortie_form =  $request->request->get('sortie_form');
-            $sortie_form["site"]=$this->getUser()->getSite()->getId();
-            $request->request->set('sortie_form',$sortie_form);
-        }
+//        if($request->request->get('sortie_form')){
+//            $sortie_form =  $request->request->get('sortie_form');
+//            $sortie_form["site"]=$this->getUser()->getSite()->getId();
+//            $request->request->set('sortie_form',$sortie_form);
+//        }
 //        dd($sortie_form);
         $sortieForm->handleRequest($request);
 
@@ -61,6 +61,7 @@ class SortieController extends AbstractController
         return $this->render('sortie/newSortie.html.twig',[
             'sortieForm'=>$sortieForm->createView(),
           'lieuForm'=>$lieuForm->createView(),
+            "site"=>$this->getUser()->getSite()
         ]);
     }
 
