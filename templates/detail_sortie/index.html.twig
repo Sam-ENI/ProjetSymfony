@@ -1,52 +1,223 @@
 {% extends '/layout/base.html.twig' %}
 
 {% block body %}
+    <h1 class="text-center">Afficher une sortie</h1>
+
+    <div class="container-md border border-warning ">
+
+        <div class="row">
+            <div class="col sortieGauche">
+
+                <div class="group p-1">
+                    <label for="{{ infosSortie.nomSortie }}"> Nom de la sortie : </label>
+                    <input type="text" class="form-control" value="{{ infosSortie.nomSortie }}">
+                </div>
+
+                {# {{ form_widget(sortieForm._token) }} #}
 
 
-    <div class="container">
-        <div class="row align-items-start">
-            <div class="col">
+                <div class="group p-1">
+                    <label> Date et heure de la sortie : </label>
+                    <input type="text"
+                           class="form-control"
+                           value="{{ infosSortie.dateHeureDebut |date('d/m/Y') }}"
+                    >
+                </div>
 
 
-                {#<h1 class="display-5 fw-bold">{{ infosSortie.nomSortie }}</h1>#}
+                <div class="group p-1">
+                    <label> Date limite d'inscription : </label>
+                    <input type="text"
+                           value="{{ infosSortie.dateLimiteInscription |date('d/m/Y') }}"
+                           class="form-control">
+                </div>
+
+                <div class="group p-1">
+                    <label for=""> Nombre de places : </label>
+                    <input type="text"
+
+
+                           value="{{ infosSortie.nbInscriptionMax }}"
+
+                           class="form-control"
+                    >
+                </div>
+
+                <div class="group p-1 ">
+                    <label for=""> Durée : </label>
+
+                    <input type="text"
+
+                           value=" {{ infosSortie.duree }}"
+
+                           class="form-control"
+                    >
+                </div>
+
+                <div class="group p-1">
+                    <label for=""> Description et infos : </label>
+                    <input type="text"
+
+                           value="{{ infosSortie.infoSortie }}"
+
+                           class="form-control"
+                    >
+                </div>
             </div>
 
-            <div class="col">
+            <div class="col sortieDroite">
+                <div class="group p-1">
+                    <label for="{{ infosSortie.site }}"> Ville organisatrice : </label>
+                    <input type="text" class="form-control" value="{{ infosSortie.site }}">
+                </div>
 
-                <h1 class="display-5 fw-bold">Afficher la sortie</h1>
-                <div class="col-lg-6 mx-auto">
-                    <p class="lead mb-4">Nom de la sortie : {{ infosSortie.nomSortie }}</p>
-                    <p class="lead mb-4">Date et heure de la sortie : {{ infosSortie.dateHeureDebut |date('d/m/Y') }}</p>
-                    <p class="lead mb-4">Date limite d'inscription : {{ infosSortie.dateLimiteInscription |date('d/m/Y') }}</p>
-                    <p class="lead mb-4">Nombre de place : {{infosSortie.nbInscriptionMax }}</p>
-                    <p class="lead mb-4">Duree : {{ infosSortie.duree }}</p>
-                    <p class="lead mb-4">Description et infos : {{ infosSortie.infoSortie }}</p>
-                    <p class="lead mb-4">Ville Organisatrice : {{ infosSortie.site }}</p>
-                    <p class="lead mb-4">Lieu : {{ infosSortie.lieu.nomlieu }}</p>
-                    <p class="lead mb-4">Rue :  {{ infosSortie.lieu.rue }}</p>
-                    <p class="lead mb-4">Code Postal : {{ infosSortie.lieu.ville.codePostal}}</p>
-                    <p class="lead mb-4">Latitude : {{ infosSortie.lieu.latitude }}</p>
-                    <p class="lead mb-4">Longitude : {{ infosSortie.lieu.longitude }}</p>
-                    <ul>
-                        {% for participant in infosSortie.participant  %}
-                            <li>{{ participant.username |e }}</li>
-                            <li>{{ participant.nom ~ ' ' ~ participant.prenom |e }} </li>
+                <div class="group p-1">
+                    <label for="">Ville :</label>
+                    <input type="text"
+
+                           value="{{ infosSortie.lieu.ville.nomVille }}"
+
+                           class="form-control"
+                    >
+                </div>
+                <div class="group p-1">
+                    <label for="">Lieu :</label>
+                    <input type="text"
+
+                           value="{{ infosSortie.lieu.nomlieu }}"
+
+                           class="form-control"
+                    >
+                </div>
+
+                <div class="group p-1">
+                    <label for="">Rue :</label>
+                    <input type="text"
+
+                           value="{{ infosSortie.lieu.rue }}"
+
+                           class="form-control"
+                    >
+                </div>
+
+                <div class="group p-1">
+                    <label for="">Code Postal :</label>
+                    <input type="text"
+
+                           value="{{ infosSortie.lieu.ville.codePostal }}"
+
+                           class="form-control"
+                    >
+                </div>
+
+                <div class="group p-1">
+                    <label for="">Latitude :</label>
+                    <input type="text"
+
+                           value="{{ infosSortie.lieu.latitude }}"
+
+                           class="form-control"
+                    >
+                </div>
+
+                <div class="group p-1">
+                    <label for="">Longitude :</label>
+                    <input type="text"
+
+                           value="{{ infosSortie.lieu.longitude }}"
+
+                           class="form-control"
+                    >
+                </div>
+
+
+            </div>
+            <style>
+                .my-custom-scrollbar {
+                    position: relative;
+                    height: 200px;
+                    overflow: auto;
+                }
+
+                .table-wrapper-scroll-y {
+                    display: block;
+                }
+            </style>
+            <div>
+                <h6>Liste des participants inscrits :</h6>
+                <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+                    <table class="table table-bordered table-striped mb-0">
+
+                        <thead>
+                        <tr>
+
+                            <th scope="col">Pseudo</th>
+                            <th scope="col">Nom</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for participant in infosSortie.participant %}
+                            <tr>
+                                <td>{{ participant.username |e }}  </td>
+                                <td> {{ participant.nom ~ ' ' ~ participant.prenom |e }}</td>
+                            </tr>
                         {% endfor %}
-                    </ul>
 
-
-
-
-
-                    {# <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                        <a class="btn btn-info" href="{{ path('main') }}">Retour</a>
-                        <a class="btn btn-info" href="#">Modifier</a>
-                    </div>#}
+                        </tbody>
+                    </table>
 
                 </div>
             </div>
+
+
         </div>
 
     </div>
 
-    {% endblock %}
+
+
+
+    {# <div class="container">
+        <div class="row align-items-start">
+            <div class="col">
+    #}{# <h1 class="display-5 fw-bold">{{ infosSortie.nomSortie }}</h1> #}{#
+</div>
+
+<div class=" col">
+#}{# <div class="col-lg-6 mx-auto">
+                    <p class="lead mb-4">Nom de la sortie : {{ infosSortie.nomSortie }}</p>
+                    <p class="lead mb-4">Date et heure de la sortie
+                        : {{ infosSortie.dateHeureDebut |date('d/m/Y') }}</p>
+                    <p class="lead mb-4">Date limite d'inscription
+                        : {{ infosSortie.dateLimiteInscription |date('d/m/Y') }}</p>
+                    <p class="lead mb-4">Nombre de place : {{ infosSortie.nbInscriptionMax }}</p>
+                    <p class="lead mb-4">Duree : {{ infosSortie.duree }}</p>
+                    <p class="lead mb-4">Description et infos : {{ infosSortie.infoSortie }}</p>
+                    <p class="lead mb-4">Ville Organisatrice : {{ infosSortie.site }}</p>
+                    <p class="lead mb-4">Lieu : {{ infosSortie.lieu.nomlieu }}</p>
+                    <p class="lead mb-4">Rue : {{ infosSortie.lieu.rue }}</p>
+                    <p class="lead mb-4">Code Postal : {{ infosSortie.lieu.ville.codePostal }}</p>
+                    <p class="lead mb-4">Latitude : {{ infosSortie.lieu.latitude }}</p>
+                    <p class="lead mb-4">Longitude : {{ infosSortie.lieu.longitude }}</p>
+#}{# #}{# {% for participant in infosSortie.participant  %}
+                        <td>{{ participant.username |e }}  </td>
+                    {% endfor %}
+                    {% for participant in infosSortie.participant  %}
+                        <td> {{ participant.nom ~ ' ' ~ participant.prenom |e }}</td>
+
+                    {% endfor %} #}{# #}{#
+#}{# #}{# <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <a class="btn btn-info" href="{{ path('main') }}">Retour</a>
+                        <a class="btn btn-info" href="#">Modifier</a>
+                    </div> #}{# #}{#
+</div> #}{#
+</div>
+</div>
+</div>
+
+</div> #}
+
+{% endblock %}
