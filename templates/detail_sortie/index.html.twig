@@ -160,8 +160,9 @@
                         <tbody>
 
                         {% for participant in infosSortie.participant %}
+
                             <tr>
-                                <td>{{ participant.username |e }}  </td>
+                                <td><a href="{{ path('detail_id', { 'id': participant.id }) }}">{{ participant.username |e }}</a>  </td>
                                 <td> {{ participant.nom ~ ' ' ~ participant.prenom |e }}</td>
                             </tr>
                         {% endfor %}
