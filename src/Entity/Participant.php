@@ -9,10 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ParticipantRepository::class)
- * @UniqueEntity(fields={"username"}, message="Mauvais pseudo. Merci d'en choisir un autre")
+ * @UniqueEntity(fields={"username"}, message="Le pseudo est déjà utilisé. Merci d'en choisir un autre")
+ * @UniqueEntity(fields={"mail"}, message="Le mail est déjà utilisé. Merci d'en choisir un autre")
  */
 class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
