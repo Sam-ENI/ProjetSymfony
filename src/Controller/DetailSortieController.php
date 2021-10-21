@@ -50,29 +50,42 @@ class DetailSortieController extends AbstractController
      */
     public function rejoindre (EntityManagerInterface $emi, Sortie $sortie){
 
-        //TODO vérifier si le participant est déjà inscrit, créer nombre d'inscrits et vérifier si le nombre max est atteint
-        // Ajouter un participant à la sortie
-
         $sortieRepo = $this->getDoctrine()->getRepository(Rejoindre::class)->findOneBy(['sonParticipant'=>$this->getUser(), 'saSortie'=>$sortie]);
-
-        // Test si le participant est déjà inscrit
-        if ($sortieRepo!==null){
-            $this->addFlash('alert', 'Participant déjà inscrit à la sortie');
-
-            return $this->redirectToRoute('main');
-        }
-
         $rejoindre = new Rejoindre();
-
         $rejoindre->setSonParticipant($this->getUser());
 
-         // Test si le nombre max est atteint et clotue la sortie
-        $sortie->setNbInscrits($sortie->getNbInscrits()+1);
-        if ($sortie->getNbInscrits() == $sortie->getNbInscriptionMax()){
+        // Test si le participant est déjà inscrit et clôture la sortie
+        if ($sortieRepo!==null){
+            $this->addFlash('warning', 'Participant déjà inscrit à la sortie');
+
+
+            //Clôture la sortie
             $etatCloturee = $emi -> getRepository(Etat::class)->findOneBy(['libelle'=>'clôturée']);
             $sortie->setEtat($etatCloturee);
-        }
+            $emi->persist($sortie);
+            $emi->flush();
 
+            return $this->redirectToRoute('main');
+
+
+        } elseif ($sortie->getNbInscrits() == $sortie->getNbInscriptionMax()){
+        // Test si le nombre max est atteint et cloture la sortie
+
+            //Clôture la sortie
+            $etatCloturee = $emi -> getRepository(Etat::class)->findOneBy(['libelle'=>'clôturée']);
+            $sortie->setEtat($etatCloturee);
+            $emi->persist($sortie);
+            $emi->flush();
+
+            $this->addFlash('alert', "Nombre maximum d'inscriptions atteint");
+
+            return $this->redirectToRoute('main');
+
+        }
+        //TODO test si la sortie est clôturé
+
+
+        $sortie->setNbInscrits($sortie->getNbInscrits()+1);
         $rejoindre->setSaSortie($sortie);
         $rejoindre->setDateInscription(new \DateTime());
 
@@ -106,6 +119,12 @@ class DetailSortieController extends AbstractController
             if ($sortie->getNbInscrits() < $sortie->getNbInscriptionMax()) {
                 $etatPubliee = $emi->getRepository(Etat::class)->findOneBy(['libelle' => 'publiée']);
                 $sortie->setEtat($etatPubliee);
+            } else {
+
+                $this->addFlash('warning', "Vous ne pouvez pas vous inscrire à cette sortie.");
+
+                return $this->redirectToRoute('main');
+
             }
         }
 
