@@ -66,18 +66,14 @@ class DetailSortieController extends AbstractController
 
         $rejoindre->setSonParticipant($this->getUser());
 
-        // Test si le nombre max est atteint et clotue la sortie
+         // Test si le nombre max est atteint et clotue la sortie
         $sortie->setNbInscrits($sortie->getNbInscrits()+1);
         if ($sortie->getNbInscrits() == $sortie->getNbInscriptionMax()){
             $etatCloturee = $emi -> getRepository(Etat::class)->findOneBy(['libelle'=>'clôturée']);
             $sortie->setEtat($etatCloturee);
         }
 
-
-
-
         $rejoindre->setSaSortie($sortie);
-
         $rejoindre->setDateInscription(new \DateTime());
 
         //sauvegarder les données en base
@@ -102,11 +98,22 @@ class DetailSortieController extends AbstractController
             ->getRepository(Rejoindre::class)
             ->findOneBy(['sonParticipant'=>$this->getUser(), 'saSortie'=>$sortie]);
 
+        // Retire un participant en base de données et change l'état de la sortie en publié
+        if ($sortieRepo !== null) {
+
+            $sortie->setNbInscrits($sortie->getNbInscrits() - 1);
+
+            if ($sortie->getNbInscrits() < $sortie->getNbInscriptionMax()) {
+                $etatPubliee = $emi->getRepository(Etat::class)->findOneBy(['libelle' => 'publiée']);
+                $sortie->setEtat($etatPubliee);
+            }
+        }
+
         //l'annuler en base de données
         $emi ->remove($sortieRepo);
         $emi->flush();
 
-        $this->addFlash('success', 'Sortie annulée');
+        $this->addFlash('success', 'Vous vous êtes désinscrit de la sortie');
 
         return $this->redirectToRoute('main');
     }
