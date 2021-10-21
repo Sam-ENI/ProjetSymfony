@@ -27,4 +27,18 @@ class DetailProfileController extends AbstractController
                 'participant' => $user
         ]);
     }
+
+    /**
+     * @Route ("/profile/{id}", name="detail_id", requirements={"id":"\d+"})
+     * @param $id
+     * @param EntityManagerInterface $emi
+     * @return Response
+     */
+    public function detailById(EntityManagerInterface $emi, $id)
+    {
+        $participant = $emi->getRepository(Participant::class)->find($id);
+        return $this->render('detail_profile/index.html.twig', [
+            'participant' => $participant
+        ]);
+    }
 }
