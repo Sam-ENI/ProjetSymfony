@@ -1,0 +1,41 @@
+{% extends '/layout/base.html.twig' %}
+
+{% block body %}
+
+    <h1 class="text-center">Supprimer la sortie</h1>
+    {{ form_start(deleteSortieForm) }}
+    <div class="container-md border border-warning ">
+
+
+        <div class="row">
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                <span>
+                <div class="form-group">
+                    <p>{{ form_label(deleteSortieForm) }}</p>
+                </div>
+
+                    <div class="class col">
+                    <div class="form-control">
+                        <p>{{ form_widget(deleteSortieForm) }}</p>
+                    </div>
+                    {{ form_errors(deleteSortieForm) }}
+                        </span>
+                    </div>
+
+            </div>
+
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+
+                <button class="btn btn-lg btn-primary" type="submit">Supprimer Sortie</button>
+
+                <button class="btn btn-lg btn-primary" type="submit" onclick="history.back()">Annuler</button>
+
+                {{ form_end(deleteSortieForm) }}
+
+            </div>
+
+
+    </div>
+
+
+{% endblock %}

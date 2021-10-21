@@ -134,9 +134,10 @@
                 </div>
 
                 {% if is_granted('ROLE_USER')   %}
-
+                <span>
                     <a class="btn btn-lg btn-primary" href="{{ path ('rejoindre_sortie',{'id':infosSortie.id}) }}">Rejoindre la sortie</a>
-
+                    <a class="btn btn-lg btn-primary" href="{{ path ('delete',{'id':infosSortie.id}) }}">Supprimer la sortie</a>
+                </span>
                 {% else %}
 
                     <a class="btn btn-lg btn-primary" href="{{ path('app_login') }}">Veuillez vous connecter</a>
