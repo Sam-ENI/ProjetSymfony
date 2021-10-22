@@ -28,15 +28,7 @@ class MainController extends AbstractController
         $sorties = $this->getDoctrine()->getRepository(Sortie::class)->findBy([], ['dateHeureDebut' => 'asc']);
         $sites = $this->getDoctrine()->getRepository(Site::class)->findAll();
         $rejoindre = $this->getDoctrine()->getRepository(Rejoindre::class)->findAll();
-        /*
-        if(!empty($sites) && !empty('search')){
-            $sr->findBySite('sites');
-        }
 
-        $entreeRecherchee  = $request->request->get('searchSortie');
-        if(!empty($entreeRecherchee) && !empty('search')){
-            $sr->findBySearch($entreeRecherchee);
-        }*/
         return $this->render('main/index.html.twig', [
             'controller_name' => 'MainController',
             'sorties' => $sorties,

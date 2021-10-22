@@ -80,9 +80,7 @@ class DetailSortieController extends AbstractController
 
             return $this->redirectToRoute('main');
 
-        }
-
-        if ($etatSortie !==  2){
+        } elseif ($etatSortie !==  2){
         //Test si l'état de la sortie est publiée
             $this->addFlash('warning', "Inscription impossible. La sortie n'est plus disponible.");
 
