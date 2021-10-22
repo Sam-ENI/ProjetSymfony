@@ -321,4 +321,23 @@ class Sortie
         return $this;
     }
 
+    public function getEndDate(): \DateTimeInterface
+    {
+        $endDate = clone $this->getDateHeureDebut();
+
+        if($this->getDuree()){
+
+            $durationInterval = new \DateInterval("PT".$this->getDuree()."H");
+            $endDate = $endDate->add($durationInterval);
+        } else {
+
+            $endDate->setTime(23,59,59);
+
+        }
+
+        return $endDate;
+
+    }
+
+
 }

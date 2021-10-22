@@ -53,6 +53,7 @@ class DetailSortieController extends AbstractController
         $sortieRepo = $this->getDoctrine()->getRepository(Rejoindre::class)->findOneBy(['sonParticipant'=>$this->getUser(), 'saSortie'=>$sortie]);
         $rejoindre = new Rejoindre();
         $rejoindre->setSonParticipant($this->getUser());
+        $etatSortie = $sortie->getEtat()->getLibelle();
 
         // Test si le participant est déjà inscrit et clôture la sortie
         if ($sortieRepo!==null){
@@ -76,14 +77,19 @@ class DetailSortieController extends AbstractController
             $sortie->setEtat($etatCloturee);
             $emi->persist($sortie);
             $emi->flush();
-
+            //dd($sortie);
             $this->addFlash('alert', "Nombre maximum d'inscriptions atteint");
 
             return $this->redirectToRoute('main');
 
-        }
-        //TODO test si la sortie est clôturé
+        } elseif ($etatSortie !=="publiée"){
+        //Test si l'état de la sortie est publiée
+            $this->addFlash('warning', "Inscription impossible. La sortie n'est plus disponible.");
 
+            return $this->redirectToRoute('main');
+
+
+        }
 
         $sortie->setNbInscrits($sortie->getNbInscrits()+1);
         $rejoindre->setSaSortie($sortie);

@@ -28,7 +28,6 @@ class ProfileUpdateController extends AbstractController
     {
 
         //Instanciation de la classe Participant
-
         $participant = $repo->find($id);
         $form = $this->createForm(EditUserType::class, $participant);
         $form->handleRequest($request);
@@ -38,7 +37,6 @@ class ProfileUpdateController extends AbstractController
         //TODO Image upload
 
         if ($form->isSubmitted() && $form->isValid()){
-
             $participant->setAdministrateur(false);
             $participant->setActif(false);
             $participant->setPassword(
