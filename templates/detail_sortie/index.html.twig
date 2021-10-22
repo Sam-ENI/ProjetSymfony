@@ -163,7 +163,7 @@
 
                     <table class="table table-bordered table-striped mb-0">
 
-                        <thead>
+                        <thead class="bg-light">
                         <tr>
 
                             <th scope="col">Pseudo</th>
@@ -171,15 +171,16 @@
 
                         </tr>
                         </thead>
-                        <tbody>
-
+                        <tbody class="text-light">
 
                             {% for item in rejoindre %}
+                                {% if item.saSortie.id == infosSortie.id  %}
 
-                                <tr>
-                                    <td><a href="{{ path('detail_id', { 'id': item.sonParticipant.id }) }}">{{ item.sonParticipant.username |e }}</a>  </td>
-                                    <td> {{ item.sonParticipant.nom ~ ' ' ~ item.sonParticipant.prenom |e }}</td>
+                                <tr class="text-light">
+                                    <td class="text-light"><a href="{{ path('detail_id', { 'id': item.sonParticipant.id }) }}">{{ item.sonParticipant.username |e }}</a>  </td>
+                                    <td class="text-light"> {{ item.sonParticipant.nom ~ ' ' ~ item.sonParticipant.prenom |e }}</td>
                                 </tr>
+                            {% endif %}
                             {% endfor %}
 
 

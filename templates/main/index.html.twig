@@ -308,7 +308,7 @@
                     <td>{{ sortie.nbInscrits }} / {{ sortie.nbInscriptionMax }}</td>
                     <td>{{ sortie.etat }}</td>
                     <td>{%  for item in sortie.rejoindres %}
-                            {%  if item.sonParticipant.id is null %}
+                            {%  if item.sonParticipant.id is not null %}
                             {% if app.user.id == item.sonParticipant.id %}
                                 X
                                 {% set break = true %}

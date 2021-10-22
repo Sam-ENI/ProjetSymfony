@@ -9,6 +9,7 @@ use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Entity\Site;
 use App\Entity\Participant;
+use App\Repository\RejoindreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use http\Env\Request;
 use Monolog\Handler\IFTTTHandler;
@@ -57,18 +58,11 @@ class DetailSortieController extends AbstractController
         $sortieRepo = $this->getDoctrine()->getRepository(Rejoindre::class)->findOneBy(['sonParticipant'=>$this->getUser(), 'saSortie'=>$sortie]);
         $rejoindre = new Rejoindre();
         $rejoindre->setSonParticipant($this->getUser());
-        $etatSortie = $sortie->getEtat()->getLibelle();
+        $etatSortie = $sortie->getEtat()->getId();
 
-        // Test si le participant est déjà inscrit et clôture la sortie
+        // Test si le participant est déjà inscrit
         if ($sortieRepo!==null){
             $this->addFlash('warning', 'Participant déjà inscrit à la sortie');
-
-
-            //Clôture la sortie
-            $etatCloturee = $emi -> getRepository(Etat::class)->findOneBy(['libelle'=>'clôturée']);
-            $sortie->setEtat($etatCloturee);
-            $emi->persist($sortie);
-            $emi->flush();
 
             return $this->redirectToRoute('main');
 
@@ -76,14 +70,8 @@ class DetailSortieController extends AbstractController
         } elseif ($sortie->getNbInscrits() == $sortie->getNbInscriptionMax()){
         // Test si le nombre max est atteint et cloture la sortie
 
-<<<<<<< HEAD
-        // Test si le nombre max est atteint et cloture la sortie
-        $sortie->setNbInscrits($sortie->getNbInscrits()+1);
-        if ($sortie->getNbInscrits() == $sortie->getNbInscriptionMax()){
-=======
             //Clôture la sortie
->>>>>>> origin/nicolas11
-            $etatCloturee = $emi -> getRepository(Etat::class)->findOneBy(['libelle'=>'clôturée']);
+            $etatCloturee = $emi -> getRepository(Etat::class)->findOneBy(['id'=>3]);
             $sortie->setEtat($etatCloturee);
             $emi->persist($sortie);
             $emi->flush();
@@ -92,7 +80,9 @@ class DetailSortieController extends AbstractController
 
             return $this->redirectToRoute('main');
 
-        } elseif ($etatSortie !=="publiée"){
+        }
+
+        if ($etatSortie !==  2){
         //Test si l'état de la sortie est publiée
             $this->addFlash('warning', "Inscription impossible. La sortie n'est plus disponible.");
 
@@ -120,42 +110,36 @@ class DetailSortieController extends AbstractController
      * @param EntityManagerInterface $emi
      * @param Sortie $sortie
      */
-    public function desister (EntityManagerInterface $emi, Sortie $sortie){
+    public function desister(EntityManagerInterface $emi,Sortie $sortie,  $id, RejoindreRepository $rr)
+    {
+        $rejoindre = $rr->findOneBy(['sonParticipant' => $this->getUser()->getId(), 'saSortie' => $id]);
 
         //récupérer la sortie en base de données et...
-        $sortieRepo = $this->getDoctrine()
-            ->getRepository(Rejoindre::class)
-            ->findOneBy(['sonParticipant'=>$this->getUser(), 'saSortie'=>$sortie]);
-
+        /*$sortieRepo = $this->getDoctrine()->getRepository(Rejoindre::class)->findOneBy();*/
+/*        dd($sortieRepo);*/
         // Retire un participant en base de données et change l'état de la sortie en publié
-        if ($sortieRepo !== null) {
+
 
             $sortie->setNbInscrits($sortie->getNbInscrits() - 1);
 
-            if ($sortie->getNbInscrits() < $sortie->getNbInscriptionMax()) {
-                $etatPubliee = $emi->getRepository(Etat::class)->findOneBy(['libelle' => 'publiée']);
-                $sortie->setEtat($etatPubliee);
-            } else {
-
-                $this->addFlash('warning', "Vous ne pouvez pas vous inscrire à cette sortie.");
+            /*if ($sortie->getNbInscrits() < $sortie->getNbInscriptionMax()) {
+                $etatOuverte = $emi->getRepository(Etat::class)->findOneBy(['libelle' => 2]);
+                $sortie->setEtat($etatOuverte);
 
                 return $this->redirectToRoute('main');
 
-            }
+            }*/
+
+
+            //l'annuler en base de données
+            $emi->remove($rejoindre);
+            $emi->flush();
+
+            $this->addFlash('success', 'Vous vous êtes désinscrit de la sortie');
+
+            return $this->redirectToRoute('main');
         }
 
-        //l'annuler en base de données
-        $emi ->remove($sortieRepo);
-        $emi->flush();
-
-<<<<<<< HEAD
-        $this->addFlash('success', 'Participation à la sortie annulée');
-=======
-        $this->addFlash('success', 'Vous vous êtes désinscrit de la sortie');
->>>>>>> origin/nicolas11
-
-        return $this->redirectToRoute('main');
-    }
 
 }
 
