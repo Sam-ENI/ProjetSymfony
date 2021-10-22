@@ -133,7 +133,18 @@
                            readonly>
                 </div>
 
-                <p class="lead mb-4"><a href="{{ path ('rejoindre_sortie',{'id':infosSortie.id}) }}">Rejoindre la sortie</a> </p>
+                {% if is_granted('ROLE_USER')   %}
+                <span>
+                    <a class="btn btn-lg btn-primary" href="{{ path ('rejoindre_sortie',{'id':infosSortie.id}) }}">Rejoindre la sortie</a>
+                    <a class="btn btn-lg btn-primary" href="{{ path ('delete',{'id':infosSortie.id}) }}">Supprimer la sortie</a>
+                </span>
+                {% else %}
+
+                    <a class="btn btn-lg btn-primary" href="{{ path('app_login') }}">Veuillez vous connecter</a>
+
+
+                {% endif %}
+
             </div>
             <style>
                 .my-custom-scrollbar {

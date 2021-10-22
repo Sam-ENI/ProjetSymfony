@@ -30,7 +30,7 @@ class EditUserType extends AbstractType
             ]);
 
 
-            /*TODO : modifier le password
+            /*
 
              ->add('roles')
             ->add('administrateur')

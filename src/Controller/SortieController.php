@@ -9,6 +9,7 @@ use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Form\LieuFormType;
 use App\Form\SortieFormType;
+use App\Form\DeleteSortieForm;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
@@ -30,7 +31,6 @@ use Symfony\Component\Serializer\Serializer;
 
 class SortieController extends AbstractController
 {
-
 
     /**
      * @Route ("/sortie/insert",name="insert")
@@ -93,7 +93,6 @@ class SortieController extends AbstractController
 
         }
 
-
         return $this->render('sortie/newSortie.html.twig',[
             'sortieForm'=>$sortieForm->createView(),
             'lieuForm'=>$lieuForm->createView(),
@@ -140,9 +139,31 @@ class SortieController extends AbstractController
     /**
      * @Route ("/sortie/delete/{id}",name="delete")
      */
-    public function delete(Request $request,$id){
-        return $this->render('sortie/newSortie.html.twig');
-    }
+    public function delete(Request $request, EntityManagerInterface $em, $id){
 
+        //Recherche les données
+        $sortie = $em->getRepository(Sortie::class)->find($id);
+        $userCourant = $this->getUser();
+        $DeleteSortieFom = $this->createForm(DeleteSortieForm::class,$sortie);
+        $DeleteSortieFom->handleRequest($request);
 
+        //Traite le formulaire
+        if ($DeleteSortieFom->isSubmitted() && $DeleteSortieFom->isValid()) {
+            //Test si le user est organisateur de la sortie
+            if ($userCourant == null || $userCourant->getId() != $sortie->getOrganisateur()->getId()) {
+                $this->addFlash('warning', "Vous n'êtes pas l'organisateur de la sortie.");
+                return $this->redirectToRoute("main");
+            } else {
+
+                //Mettre l'état de la sortie en annulée
+                $etatAnnule = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'annulée']);
+                $sortie->setEtat($etatAnnule);
+                $em->persist($sortie);
+                $em->flush();
+            }
+        }
+        return $this->render('sortie/deleteSortie.html.twig',[
+            'deleteSortieForm'=>$DeleteSortieFom->createView()
+        ]);
+        }
 }
